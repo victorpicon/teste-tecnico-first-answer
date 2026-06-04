@@ -47,15 +47,17 @@ O LLM (Gemini 2.5 Flash) resolve os casos difíceis naturalmente: "Nubank Ultrav
 
 1. **Ambiguidade de nomes de marca**: "Inter" pode ser Banco Inter, Inter Milan ou outra empresa. O LLM escolhe com base no contexto, mas pode errar em textos ambíguos.
 
-2. **Variantes da marca monitorada**: se `marca_monitorada` é "Nubank" e o texto usa uma gíria ou abreviação não óbvia (ex: "o banco roxo"), o modelo pode não reconhecer como a mesma marca.
+2. **Relevância vs. presença**: o script extrai *todas* as marcas mencionadas, independente de categoria. No Case 3, ChatGPT, Gemini, Claude, Perplexity e Copilot aparecem em `other_brands` porque são mencionados no texto — mas são plataformas monitoradas pelos concorrentes da First Answer, não concorrentes diretos. A filtragem por categoria é uma decisão de produto; uma solução seria adicionar um parâmetro `categoria` para que o LLM restrinja a extração ao segmento relevante.
 
-3. **Textos fora do português/inglês**: o prompt foi escrito em inglês e os casos de teste são em português. Textos em outros idiomas ou scripts não-latinos podem degradar a qualidade da extração.
+3. **Variantes da marca monitorada**: se `marca_monitorada` é "Nubank" e o texto usa uma gíria ou abreviação não óbvia (ex: "o banco roxo"), o modelo pode não reconhecer como a mesma marca.
 
-4. **Alucinação**: o LLM pode, raramente, "ver" uma marca que não está no texto. É incomum com prompts de extração bem definidos, mas não impossível.
+4. **Textos fora do português/inglês**: o prompt foi escrito em inglês e os casos de teste são em português. Textos em outros idiomas ou scripts não-latinos podem degradar a qualidade da extração.
 
-5. **Rate limit / dependência de rede**: o tier gratuito do Gemini tem limite de ~1.500 req/dia. A solução não funciona offline e falha se a API estiver fora do ar.
+5. **Alucinação**: o LLM pode, raramente, "ver" uma marca que não está no texto. É incomum com prompts de extração bem definidos, mas não impossível.
 
-6. **Resposta malformada**: o `response_mime_type="application/json"` do Gemini é confiável, mas não é garantia absoluta. A lógica de retry cobre uma falha, mas com apenas uma retentativa — em produção, isso precisaria de backoff exponencial e circuit breaker. A escolha foi intencional: adicionar retry completo seria over-engineering para um script de 3 casos.
+6. **Rate limit / dependência de rede**: o tier gratuito do Gemini tem limite de ~1.500 req/dia. A solução não funciona offline e falha se a API estiver fora do ar.
+
+7. **Resposta malformada**: o `response_mime_type="application/json"` do Gemini é confiável, mas não é garantia absoluta. A lógica de retry cobre uma falha, mas com apenas uma retentativa — em produção, isso precisaria de backoff exponencial e circuit breaker. A escolha foi intencional: adicionar retry completo seria over-engineering para um script de 3 casos.
 
 ## Outputs
 

@@ -15,3 +15,6 @@ wheels/
 # Claude Code internals
 .claude/
 skills-lock.json
+
+# Interview prep
+ENTREVISTA.md
